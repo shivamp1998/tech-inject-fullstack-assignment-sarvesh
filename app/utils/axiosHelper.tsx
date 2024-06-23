@@ -8,4 +8,8 @@ export const axiosPost = async (url: string, headers: any = {}, body: any) => {
     return axios.post(`${url}`, body, {headers})
 }
 
+export const axiosDelete = async (url: string, headers: any = {}) => {
+    return axios.delete(`${url}`);
+}
+
 

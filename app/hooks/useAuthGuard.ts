@@ -1,6 +1,7 @@
-// hooks/useAuthGuard.ts
+'use client';
+
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation'; // Update to use next/navigation
 import { parseCookies } from 'nookies';
 
 const useAuthGuard = () => {
@@ -8,7 +9,6 @@ const useAuthGuard = () => {
   
   useEffect(() => {
     const cookies = parseCookies();
-    console.log ("is this cookie working", cookies)
     if (cookies.token) {
       router.push('/dashboard');
     }

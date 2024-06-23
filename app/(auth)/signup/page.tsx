@@ -13,10 +13,10 @@
       justifyContent: 'center',
       alignItems: 'center',
       minHeight: '100vh',
-      backgroundColor: '#f3e5ab', // Warm, cozy background color
+      backgroundColor: '#f3e5ab', 
     },
     formWrapper: {
-      backgroundColor: '#fff7e6', // Light, warm background color for form
+      backgroundColor: '#fff7e6',
       padding: theme.spacing(4),
       borderRadius: theme.shape.borderRadius,
       boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
@@ -31,13 +31,13 @@
       marginBottom: theme.spacing(2),
     },
     error: {
-      color: '#d32f2f', // Error message color
+      color: '#d32f2f', 
       marginBottom: theme.spacing(2),
       fontSize: '0.875rem',
     },
     button: {
       marginTop: theme.spacing(2),
-      backgroundColor: '#ff7043', // Cozy, warm button color
+      backgroundColor: '#ff7043', 
       color: '#ffffff',
       '&:hover': {
         backgroundColor: '#ff5722',
@@ -45,7 +45,7 @@
     },
     title: {
       marginBottom: theme.spacing(2),
-      color: '#6d4c41', // Warm color for title
+      color: '#6d4c41',
     },
   }));
 

@@ -55,7 +55,6 @@ const Login: React.FC<{}> = () => {
   };
 
   return (
-    <AuthGuard>
       <div className={classes.container}>
         <div className={classes.formWrapper}>
           <Typography variant="h5" className={classes.title}>
@@ -99,7 +98,6 @@ const Login: React.FC<{}> = () => {
           </Formik>
         </div>
       </div>
-    </AuthGuard>
   );
 };
 
