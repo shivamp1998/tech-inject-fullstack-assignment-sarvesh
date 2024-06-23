@@ -1,13 +1,11 @@
-import axios, { AxiosResponse} from 'axios';
-const baseURL: string | undefined = process.env.BASE_URL;
+import axios from 'axios';
 
-
-export const axiosGet = async (url: string, headers: any) => {
-    return axios.get(baseURL + url, {headers})
+export const axiosGet = async (url: string, headers: any = {}) => {
+    return axios.get(`${url}`, {headers})
 }
 
-export const axiosPost = async (url: string, headers: any, body: any) => {
-    return axios.post(baseURL + url, body, {headers})
+export const axiosPost = async (url: string, headers: any = {}, body: any) => {
+    return axios.post(`${url}`, body, {headers})
 }
 
 

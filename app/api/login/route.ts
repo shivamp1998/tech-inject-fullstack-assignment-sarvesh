@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         }else{
             throw new Error("Passwords do not match!");
         }
-    }catch(err) {
+    }catch(err: any) {
         return NextResponse.json({success: false, message: err.message});
     }
 }

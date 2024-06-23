@@ -2,6 +2,7 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import { TextField, Button, Typography, makeStyles } from '@material-ui/core';
+import AuthGuard from '@/app/components/AuthGuard';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -54,49 +55,51 @@ const Login: React.FC<{}> = () => {
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.formWrapper}>
-        <Typography variant="h5" className={classes.title}>
-          Login
-        </Typography>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={(values, actions) => {
-            console.log(values, actions);
-          }}
-        >
-          {({ handleSubmit }) => (
-            <Form className={classes.form} onSubmit={handleSubmit}>
-              <Field
-                as={TextField}
-                name="email"
-                label="Email"
-                variant="outlined"
-                fullWidth
-                className={classes.field}
-              />
-              <Field
-                as={TextField}
-                name="password"
-                label="Password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                className={classes.field}
-              />
-              <Button
-                variant="contained"
-                type="submit"
-                fullWidth
-                className={classes.button}
-              >
-                Submit
-              </Button>
-            </Form>
-          )}
-        </Formik>
+    <AuthGuard>
+      <div className={classes.container}>
+        <div className={classes.formWrapper}>
+          <Typography variant="h5" className={classes.title}>
+            Login
+          </Typography>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={(values, actions) => {
+              console.log(values, actions);
+            }}
+          >
+            {({ handleSubmit }) => (
+              <Form className={classes.form} onSubmit={handleSubmit}>
+                <Field
+                  as={TextField}
+                  name="email"
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  className={classes.field}
+                />
+                <Field
+                  as={TextField}
+                  name="password"
+                  label="Password"
+                  type="password"
+                  variant="outlined"
+                  fullWidth
+                  className={classes.field}
+                />
+                <Button
+                  variant="contained"
+                  type="submit"
+                  fullWidth
+                  className={classes.button}
+                >
+                  Submit
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
-    </div>
+    </AuthGuard>
   );
 };
 
