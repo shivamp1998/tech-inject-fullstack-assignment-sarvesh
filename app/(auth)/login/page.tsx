@@ -70,7 +70,9 @@ const Signup = () => {
     console.log('submmitting form', values)
     try {
       const response = await axiosPost(`/api/login`, {}, values);
-      console.log(response.data.data);
+      if(response.data?.success) {
+        router.push('/dashboard');
+      }
     }  catch (error: any) {
       console.log('error',error)
       if (error instanceof AxiosError) {

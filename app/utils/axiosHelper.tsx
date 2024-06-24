@@ -25,3 +25,7 @@ export const axiosPost = async (url: string, headers: any = {}, body: any) => {
 export const axiosDelete = async (url: string, headers: any = {}) => {
   return axiosInstance.delete(url, { headers });
 };
+
+export const axiosPatch = async(url: string, headers: any ={}, body: any) => {
+  return axiosInstance.patch(url,body,{headers})
+}

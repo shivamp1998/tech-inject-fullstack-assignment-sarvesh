@@ -73,7 +73,10 @@ const Signup = () => {
   const handleSubmit = async (values: any, actions: any) => {
     try {
       const response = await axiosPost(`/api/signup`, {}, values);
-      console.log(response.data.data);
+      console.log(response.data);
+      if(response.data.success) {
+        router.push('/dashboard')
+      }
     }  catch (error: any) {
       if (error instanceof AxiosError) {
         enqueueSnackbar(error?.response?.data?.error || 'An error occurred', { variant: 'error' });

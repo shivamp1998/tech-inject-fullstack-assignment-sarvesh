@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
             maxAge: 60 * 60 * 24 * 7 // 1 week
         });
         delete user.password;
-        const response =  NextResponse.json({ working: 'fine', user, token }, { status: 201 });
+        const response =  NextResponse.json({ working: 'fine', user, token, success: true }, { status: 201 });
         response.headers.set('Set-Cookie', cookie);
         return response;
     } catch (err: any) {

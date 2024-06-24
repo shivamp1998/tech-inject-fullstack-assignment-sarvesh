@@ -30,6 +30,14 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'
+  },
   image: {
     type: String,
     required: true,

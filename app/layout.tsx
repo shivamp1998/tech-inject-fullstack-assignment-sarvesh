@@ -23,6 +23,6 @@ export default function RootLayout({
           </NotistackProvider>
         </body>
       </html>
-      </AuthGuard>
+    </AuthGuard>
   );
 }

@@ -11,6 +11,8 @@ const useAuthGuard = () => {
     const cookies = parseCookies();
     if (cookies.token) {
       router.push('/dashboard');
+    }else{
+      router.push('/login')
     }
   }, [router]);
 };

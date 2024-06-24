@@ -1,10 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import { Typography, Button, makeStyles, TextField, IconButton } from '@material-ui/core';
+import { Typography, Button, makeStyles, TextField, IconButton, Card, CardContent } from '@material-ui/core';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Add, Remove } from '@material-ui/icons';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -54,10 +55,18 @@ const useStyles = makeStyles((theme) => ({
   link: {
     marginTop: theme.spacing(2),
   },
+  imagePreview: {
+    width: '100%',
+    maxHeight: 200,
+    objectFit: 'cover',
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const AddRecipePage = () => {
   const classes = useStyles();
+  const [upload, setUpload] = useState(false);
+
   const [recipe, setRecipe] = useState({
     name: '',
     category: '',
@@ -66,6 +75,7 @@ const AddRecipePage = () => {
     image: '',
   });
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar(); 
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -74,7 +84,7 @@ const AddRecipePage = () => {
 
   const handleIngredientChange = (index: number, e: any) => {
     const { name, value } = e.target;
-    const ingredients = [...recipe.ingredients];
+    const ingredients:any = [...recipe.ingredients];
     ingredients[index][name] = value;
     setRecipe({ ...recipe, ingredients });
   };
@@ -97,14 +107,18 @@ const AddRecipePage = () => {
     try {
       const response = await axios.post('/api/recipe/add', recipe);
       if (response.data.success) {
-        alert('Recipe added successfully!');
-        // Optionally, redirect to the dashboard or clear the form
+        enqueueSnackbar('Recipe added successfully!', {variant: 'success'});
         router.push('/dashboard');
       } else {
-        alert(`Error: ${response.data.message}`);
+        enqueueSnackbar('Error in adding Recipe!', {variant: 'error'});
       }
     } catch (error) {
-      console.error('Error adding recipe:', error);
+      console.log('error', error)
+      if(error instanceof AxiosError) {
+        enqueueSnackbar(error?.response?.data?.message, {variant: 'error'})
+        return;
+      }
+      enqueueSnackbar('Error in adding Recipe!', {variant: 'error'});
     }
   };
 
@@ -183,7 +197,14 @@ const AddRecipePage = () => {
           onChange={handleChange}
           size="medium"
         />
-        <Button type="submit" variant="contained" className={classes.button}>
+        {recipe.image && (
+          <Card>
+            <CardContent>
+              <img src={recipe.image} alt="Recipe Image" className={classes.imagePreview} />
+            </CardContent>
+          </Card>
+        )}
+        <Button type="submit" variant="contained" className={classes.button} style={{marginTop: '10px'}}>
           Add Recipe
         </Button>
       </form>

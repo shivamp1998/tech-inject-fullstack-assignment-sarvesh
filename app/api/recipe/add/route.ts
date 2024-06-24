@@ -15,14 +15,14 @@ const handlePOST = async (req: CustomRequest): Promise<NextResponse> => {
     if (!name || !category || !ingredients || !instructions || !image) {
       throw new Error('All fields are required');
     }
-
+    console.log("userId", req.userId)
     const recipe = new Recipe({
       name,
       category,
       ingredients,
       instructions,
       image,
-      userId: req.userId, // Attach userId from middleware
+      userId: req.userId,
     });
 
     await recipe.save();
