@@ -130,7 +130,7 @@ const Dashboard = () => {
   const handleRemoveFromCollection = async (recipeId: string) => {
     setLoader(true)
     try {
-      const response = await axiosDelete(`/api/recipe/delete/${recipeId}`);
+      const response = await axiosDelete(`/api/recipe/${recipeId}`);
       setLoader(false);
     } catch (error) {
       setLoader(false);

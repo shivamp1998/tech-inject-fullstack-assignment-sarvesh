@@ -9,7 +9,7 @@ const handleDelete = async (req: CustomRequest): Promise<NextResponse> => {
       await dbConnect();
       const recipeId = req.nextUrl.pathname.split('/').pop();
       const userId = req.userId;
-      const recipe = await Recipe.findOneAndDelete({ _id: recipeId, userId });
+      const recipe = await Recipe.findOneAndDelete({ _id: recipeId});
   
       if (!recipe) {
         return NextResponse.json({ message: 'Recipe not found' }, { status: 404 });
