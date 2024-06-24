@@ -27,8 +27,6 @@ Make sure you have the following installed on your machine:
     npm install --legacy-peer-deps
 
 ### Running the application
-
-    ```bash
     npm run dev
 
 ## Features
