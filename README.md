@@ -16,7 +16,7 @@ Make sure you have the following installed on your machine:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/shivamp1998/tech-inject-fullstack-assignment-sarvesh
+   clone the repository from https://github.com/shivamp1998/tech-inject-fullstack-assignment-sarvesh
 
 2. **Replace .env-example with actual .env variables**
 3. **Navigate to project directory**
