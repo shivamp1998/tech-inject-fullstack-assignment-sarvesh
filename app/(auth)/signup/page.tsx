@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { TextField, Button, Typography, makeStyles } from '@material-ui/core';
 import { axiosPost } from '../../utils/axiosHelper';
@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 const Signup = () => {
   const classes = useStyles();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
   const initialValues = {
     name: '',
@@ -157,7 +158,7 @@ const Signup = () => {
                 className={classes.button}
                 onClick={() => router.push('/login')}
               >
-                Login
+                { loading ? "Loading..." : "Login"}
               </Button>
             </Form>
           )}

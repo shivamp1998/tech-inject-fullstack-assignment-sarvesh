@@ -95,6 +95,7 @@ const Dashboard = () => {
   const [loader, setLoader] = useState(false);
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const [searchLoader, setSearchLoader] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -110,15 +111,18 @@ const Dashboard = () => {
   }, [loader]);
 
   const handleSearch = async () => {
+    setSearchLoader(true)
     try {
       const response = await axiosGet(`/api/recipe?query=${searchQuery}`);
       setRecipes(response.data.data);
+      setSearchLoader(false);
     } catch (error) {
       setLoader(false);
       if(error instanceof AxiosError) {
         enqueueSnackbar(error?.response?.data?.message || error?.response?.data?.error || 'something went wrong!', {variant: 'error'})
         return;
       }
+      setSearchLoader(false);
       enqueueSnackbar('Error in adding Recipe!', {variant: 'error'});
     }
   };
@@ -224,7 +228,7 @@ const Dashboard = () => {
         }}
       />
       <Button variant="contained" className={classes.button} onClick={handleSearch}>
-        Search
+        { searchLoader ? 'Loading...' : 'Search'}
       </Button>
       <Button variant="contained" className={classes.button} onClick={handleAddRecipe}>
         Add Recipe
@@ -278,7 +282,7 @@ const Dashboard = () => {
                   className={classes.button}
                   onClick={() => handleRemoveFromCollection(recipe._id)}
                 >
-                  Remove from Collection
+                  Delete
                 </Button>
               </CardActions>
             </Card>

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { TextField, Button, Typography, makeStyles } from '@material-ui/core';
 import { axiosPost } from '../../utils/axiosHelper';
@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 const Signup = () => {
   const classes = useStyles();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
   const initialValues = {
     name: '',
@@ -67,14 +68,16 @@ const Signup = () => {
   });
 
   const handleSubmit = async (values: any, actions: any) => {
+    setLoading(true);
     console.log('submmitting form', values)
     try {
+      setLoading(false);
       const response = await axiosPost(`/api/login`, {}, values);
       if(response.data?.success) {
         router.push('/dashboard');
       }
     }  catch (error: any) {
-      console.log('error',error)
+      setLoading(false)
       if (error instanceof AxiosError) {
         enqueueSnackbar(error?.response?.data?.message || 'An error occurred', { variant: 'error' });
       } else {
@@ -133,7 +136,7 @@ const Signup = () => {
                 className={classes.button}
                 onClick={() => router.push('/signup')}
               >
-                Signup
+                {loading ? 'Loading...' : "Signup"}
               </Button>
             </Form>
           )}

@@ -133,7 +133,7 @@ const PersonalListPage = () => {
                     className={classes.button}
                     onClick={() => handleRemoveFromCollection(recipe._id)}
                   >
-                    Remove from Collection
+                    Delete
                   </Button>
                 </CardActions>
               </Card>
