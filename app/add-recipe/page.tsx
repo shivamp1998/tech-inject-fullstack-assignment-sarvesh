@@ -1,9 +1,10 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
-import { Typography, Button, makeStyles, TextField } from '@material-ui/core';
-import { axiosPost } from '../utils/axiosHelper';
+import { Typography, Button, makeStyles, TextField, IconButton } from '@material-ui/core';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link'
+import Link from 'next/link';
+import axios from 'axios';
+import { Add, Remove } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,6 +42,15 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '1rem', 
     },
   },
+  ingredientsContainer: {
+    width: '100%',
+    marginBottom: theme.spacing(2),
+  },
+  ingredientRow: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: theme.spacing(1),
+  },
   link: {
     marginTop: theme.spacing(2),
   },
@@ -51,23 +61,48 @@ const AddRecipePage = () => {
   const [recipe, setRecipe] = useState({
     name: '',
     category: '',
-    ingredients: '',
+    ingredients: [{ name: '', quantity: '' }],
     instructions: '',
     image: '',
   });
   const router = useRouter();
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setRecipe({ ...recipe, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleIngredientChange = (index: number, e: any) => {
+    const { name, value } = e.target;
+    const ingredients = [...recipe.ingredients];
+    ingredients[index][name] = value;
+    setRecipe({ ...recipe, ingredients });
+  };
+
+  const addIngredient = () => {
+    setRecipe({
+      ...recipe,
+      ingredients: [...recipe.ingredients, { name: '', quantity: '' }]
+    });
+  };
+
+  const removeIngredient = (index: number) => {
+    const ingredients = [...recipe.ingredients];
+    ingredients.splice(index, 1);
+    setRecipe({ ...recipe, ingredients });
+  };
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await axiosPost('/api/recipes', {}, recipe);
-      alert('Recipe added successfully!');
-      // Optionally, redirect to the dashboard or clear the form
+      const response = await axios.post('/api/recipe/add', recipe);
+      if (response.data.success) {
+        alert('Recipe added successfully!');
+        // Optionally, redirect to the dashboard or clear the form
+        router.push('/dashboard');
+      } else {
+        alert(`Error: ${response.data.message}`);
+      }
     } catch (error) {
       console.error('Error adding recipe:', error);
     }
@@ -97,17 +132,37 @@ const AddRecipePage = () => {
           onChange={handleChange}
           size="medium"
         />
-        <TextField
-          label="Ingredients"
-          name="ingredients"
-          variant="outlined"
-          multiline
-          rows={4}
-          className={classes.textField}
-          value={recipe.ingredients}
-          onChange={handleChange}
-          size="medium"
-        />
+        <div className={classes.ingredientsContainer}>
+          <Typography variant="h6">Ingredients</Typography>
+          {recipe.ingredients.map((ingredient, index) => (
+            <div key={index} className={classes.ingredientRow}>
+              <TextField
+                label="Ingredient"
+                name="name"
+                variant="outlined"
+                className={classes.textField}
+                value={ingredient.name}
+                onChange={(e) => handleIngredientChange(index, e)}
+                size="medium"
+              />
+              <TextField
+                label="Quantity"
+                name="quantity"
+                variant="outlined"
+                className={classes.textField}
+                value={ingredient.quantity}
+                onChange={(e) => handleIngredientChange(index, e)}
+                size="medium"
+              />
+              <IconButton onClick={() => removeIngredient(index)}>
+                <Remove />
+              </IconButton>
+            </div>
+          ))}
+          <Button variant="outlined" onClick={addIngredient} startIcon={<Add />}>
+            Add Ingredient
+          </Button>
+        </div>
         <TextField
           label="Instructions"
           name="instructions"
@@ -133,8 +188,8 @@ const AddRecipePage = () => {
         </Button>
       </form>
       <Link href="/dashboard" className={classes.link}>
-            Go back to Dashboard
-       </Link>
+        Go back to Dashboard
+      </Link>
     </div>
   );
 };

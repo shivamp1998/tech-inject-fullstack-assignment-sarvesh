@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import {
   Typography, Button, makeStyles, Grid, TextField, Card, CardContent, CardActions, Dialog, DialogTitle, DialogContent, DialogActions
@@ -12,15 +12,15 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     padding: theme.spacing(4),
-    backgroundColor: '#f7f7f7', // Light gray background color
+    backgroundColor: '#f7f7f7',
     minHeight: '100vh',
   },
   title: {
-    color: '#333333', // Dark gray color for title
+    color: '#333333',
     marginBottom: theme.spacing(2),
   },
   button: {
-    backgroundColor: '#ffcd38', // Yellow button color
+    backgroundColor: '#ffcd38',
     color: '#333333',
     '&:hover': {
       backgroundColor: '#ffc107',
@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(4),
   },
   card: {
-    backgroundColor: '#ffffff', // White background color for card
+    backgroundColor: '#ffffff',
     marginBottom: theme.spacing(2),
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)', // Subtle shadow
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
   cardContent: {
     paddingBottom: theme.spacing(1),
@@ -55,15 +55,15 @@ const Dashboard = () => {
   const classes = useStyles();
   const [recipes, setRecipes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
   const [personalCollection, setPersonalCollection] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axiosGet('/api/recipes');
-        setRecipes(response.data);
+        const response = await axiosGet('/api/recipe');
+        setRecipes(response.data.data);
       } catch (error) {
         console.error('Error fetching recipes:', error);
       }
@@ -74,23 +74,23 @@ const Dashboard = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axiosGet(`/api/recipes/search?query=${searchQuery}`);
-      setRecipes(response.data);
+      const response = await axiosGet(`/api/recipe?query=${searchQuery}`);
+      setRecipes(response.data.data);
     } catch (error) {
       console.error('Error searching recipes:', error);
     }
   };
 
-  const handleAddToCollection = async (recipeId) => {
+  const handleAddToCollection = async (recipeId: string) => {
     try {
-      const response = await axiosPost(`/api/users/collection`, { recipeId });
+      const response = await axiosPost(`/api/users/collection`,{}, { recipeId });
       setPersonalCollection(response.data);
     } catch (error) {
       console.error('Error adding to collection:', error);
     }
   };
 
-  const handleRemoveFromCollection = async (recipeId) => {
+  const handleRemoveFromCollection = async (recipeId: string) => {
     try {
       const response = await axiosDelete(`/api/users/collection/${recipeId}`);
       setPersonalCollection(response.data);
@@ -99,7 +99,7 @@ const Dashboard = () => {
     }
   };
 
-  const handleViewDetails = (recipe) => {
+  const handleViewDetails = (recipe: any) => {
     setSelectedRecipe(recipe);
   };
 
@@ -150,13 +150,20 @@ const Dashboard = () => {
         </div>
       )}
       <Grid container spacing={3} justify="center">
-        {recipes.map((recipe) => (
+        {recipes.map((recipe: any) => (
           <Grid item xs={12} sm={6} md={4} key={recipe._id}>
             <Card className={classes.card}>
               <CardContent className={classes.cardContent}>
                 <Typography variant="h6">{recipe.name}</Typography>
                 <Typography color="textSecondary">{recipe.category}</Typography>
-                <Typography>{recipe.ingredients.join(', ')}</Typography>
+                <Typography>
+                  Ingredients:
+                  {recipe.ingredients.map((ingredient: any, index: number) => (
+                    <div key={index}>
+                      {ingredient.name} - {ingredient.quantity}
+                    </div>
+                  ))}
+                </Typography>
               </CardContent>
               <CardActions className={classes.cardActions}>
                 <Button
@@ -194,7 +201,13 @@ const Dashboard = () => {
               {selectedRecipe.category}
             </Typography>
             <Typography variant="subtitle2">Ingredients:</Typography>
-            <Typography>{selectedRecipe.ingredients.join(', ')}</Typography>
+            <Typography>
+              {selectedRecipe.ingredients.map((ingredient: any, index: number) => (
+                <div key={index}>
+                  {ingredient.name} - {ingredient.quantity}
+                </div>
+              ))}
+            </Typography>
             <Typography variant="subtitle2">Instructions:</Typography>
             <Typography>{selectedRecipe.instructions}</Typography>
             {selectedRecipe.image && <img src={selectedRecipe.image} alt={selectedRecipe.name} style={{ width: '100%', marginTop: '10px' }} />}
